@@ -1,6 +1,7 @@
 #! user/bin/python3
 
 from git import Repo
+import pandas as pd
 import re
 import signal
 import sys
@@ -30,8 +31,10 @@ def transform(commit_list):
     return wanted_commits
 
 def load(wanted_commits):
-    for clave in wanted_commits: # Mostramos por pantalla los commits encontrados
-        print(f'Commit {clave}: {wanted_commits[clave]}')
+    # Creamos un dataframe con los commits encontrados para mostrarlos por pantalla
+    dataframe_commits = pd.DataFrame([[clave, wanted_commits[clave]] for clave in wanted_commits.keys()], columns = ['Clave del commit', 'Mensaje del commit'])
+    pd.set_option('display.max_colwidth', 95)
+    print(dataframe_commits)
 
 def keyboard_interrupt(signal, frame): # Controlamos la posible interrupción voluntaria de la ejecución (Ctrl+C)
     print('\n Se ha interrumpido la búsqueda de commits con posibles leaks [!] \n')
